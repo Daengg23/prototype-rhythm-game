@@ -1,0 +1,186 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.body-container {
+    display: flex;
+    flex-direction: column;
+    background-color: green;
+    width: 100%;
+    height: 100vh;
+}
+
+.scoreboard-container {
+    background-color: yellow;
+    width: 100%;
+    height: 10vh;
+    text-align: center;
+    font-size: 7vh;
+}
+
+.game-container {
+    background-color: rgb(4, 138, 255);
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.stat-container {
+    background-color: orange;
+    margin-left: 3vw;
+    margin-right: 3vw;
+    width: 25%;
+    height:100%;
+}
+
+.stat-element {
+    background-color: darkorange;
+    width: 100%;
+    height: 10%;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+}
+
+.display-container {
+    background-color: darkred;
+    width: 15%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.column-container {
+    width: 100%;
+    height: 90%;
+    display: flex;
+    justify-content: start;
+    overflow: hidden;
+}
+
+.column {
+    background-color: inherit;
+    border: 0.1vw solid black;
+    display: flex; /* may or may not need this */
+    flex-direction: column; /* may or may not need this */
+    box-sizing: border-box;
+    width: 25%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.healthbar-container {
+    background-color: green;
+    width: 2%;
+    height: 100%;
+}
+
+.note {
+    background-color: pink;
+    width: 3.6%;
+    height: 3vh;
+    position: absolute;
+    animation-name: scroll-down;
+    animation-duration: 0.7s;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    top: 0px;
+}
+
+.key-container {
+    display: inline-block;
+    background-color: gray;
+    width: 100%;
+    height: 10%;
+    display: flex;
+}
+
+.key {
+    width: 25%;
+    height: 100%;
+}
+
+.highlight-key {
+    background-color: transparent;
+    animation-name: fade-in-key;
+    animation-duration: 0.05s;
+    animation-fill-mode: forwards;
+    animation-timing-function: linear;
+}
+
+@keyframes fade-in-key {
+    100% {
+        background-color: white;
+    }
+}
+
+.highlight-column {
+    background: linear-gradient(0deg, rgba(255, 255, 255, 0.489), transparent);
+    animation-name: fade-in-column;
+    animation-duration: 0.3s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+}
+
+@keyframes fade-in-column {
+    25% {
+        background-color: rgba(255, 255, 255, 0.156);
+    }
+}
+
+.marked-test {
+    background-color: orange!important;
+}
+.spacing1-test {
+    width: 100%;
+    height: 20vh;
+}
+.spacing2-test {
+    width: 100%;
+    height: 10vh;
+}
+
+@keyframes scroll-down{
+
+    /* background transparent makes a cool fade out effect to reduce visibility
+    80% {
+        background: transparent;
+    }
+    */
+    100% {
+        top: 95%;
+    }
+}
+
+.hit-display {
+    background: transparent;
+    color: transparent;
+    width: 50%;
+    height: 50%;
+    text-align: center;
+    position: fixed;
+    top: 50%;
+    left: 24.5%;
+    font-size: 5vh;
+
+}
+
+.pop-in {
+    color: red;
+    animation-name: show-hit;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes show-hit {
+    0% {
+
+    }
+    10% {
+        font-size: 6vh;
+    }
+    100% {
+
+    }
+}
