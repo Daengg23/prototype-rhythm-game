@@ -24,7 +24,7 @@ let key_2_hold = false;
 let key_3_hold = false;
 let key_4_hold = false;
 
-let hit_line = 80; // the percentage of screen on where the notes will be judged for accuracy
+let hit_line = 90; // the percentage of screen on where the notes will be judged for accuracy
 let accuracyModifier = 30; // the allowed room for error (ex. 55 can be accepted in a hit_line of 60, but not 45)
 //NOTE accuracy Modifier should be tweaked when used along with scroll speed
 //NOTE animation duration should be modified to fit with the hit_line percentage
@@ -35,7 +35,9 @@ let start = false;
 let current_time = 0;
 let chord_time = 0;
 let larger_chord_time = 0;
-let note_density = 110;
+// to find note density, -> 1000 /(bpm/60), set difficultly by halfing for doubling
+// Anima Difficulties -> 327, 163.5, 81.5
+let note_density = 163.5;//freedomdive-222bpm anima-184bpm
 let health = 100;
 let score = 0;
 let combo = 0;
@@ -43,7 +45,7 @@ let misses = 0;
 let score_perfect = 0;
 let score_great = 0;
 let score_ok = 0;
-let test_audio = new Audio('freedomdive.mp3');
+let test_audio = new Audio('anima.mp3');
 
 window.setInterval(() => {
     if(start) {
@@ -323,7 +325,7 @@ window.setInterval(() => {
             note_1 = undefined;
         }
             
-        
+        /*
         if(current_time > 325 && current_time <= 2500) {
             note_1 = roll(-1);
             if(chord_time > note_density) {
@@ -337,12 +339,12 @@ window.setInterval(() => {
                 chord_time = 0;
             }
         }
-        
+        */
 
         //NOTE THere might be a corelation to the RANDOM message poping and a fuicked up chord being generated
         // A fucked up chord could happen during the first time the application is loaded up (no refreshes beforehand)
 
-        if(current_time > 4300) { // if(current_time > 0) {
+        /*if(current_time > 4300) { */ if(current_time > 0) {
             if(chord_time == note_density * 1) {
                 note_1 = roll(1);
                 note_2 = roll(1);
