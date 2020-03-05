@@ -92,8 +92,14 @@
 }
 
 .healthbar-container {
-    background-color: green;
+    background-color: red;
     width: 2%;
+    height: 100%;
+    transform: rotate(180deg); /* allows health to start at the bottom*/
+}
+.health-bar {
+    background-color: green;
+    width: 100%;
     height: 100%;
 }
 
@@ -102,7 +108,7 @@
     height: 3vh;
     position: absolute;
     animation-name: scroll-down;
-    animation-duration: 1s;
+    animation-duration: 0.7s;
     animation-timing-function: linear;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
@@ -187,7 +193,7 @@
     0% {
         top: 7%;
     }
-    50% {
+    55% {
         background: var(--scroll-background);
     }
     
@@ -216,6 +222,9 @@
     animation-duration: 0.5s;
     animation-fill-mode: forwards;
 }
+.hit-display-counter {
+    color: transparent;
+}
 
 @keyframes show-hit {
     0% {
@@ -227,4 +236,12 @@
     100% {
 
     }
+}
+
+.testing-line { /*NOTE delete later when done with hit line testing */
+    position: fixed;
+    width: 100%;
+    height: 0.3vh;
+    background-color: black;
+    top: 80%;
 }

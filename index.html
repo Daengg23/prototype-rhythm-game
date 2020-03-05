@@ -11,10 +11,13 @@
         <div class="scoreboard-container">Press "Space" to Start</div>
         <div class="hit-display">HIT!</div>
         <div class="game-container">
+
+            <div class="testing-line"></div>
+
             <div class="stat-container">
-                <div class="stat-element"> Perfect: </div>
-                <div class="stat-element"> Amazing: </div>
-                <div class="stat-element"> Dog Shit: </div>
+                <div class="stat-element"> PERFECT: <span id="perfect-counter">0</span></div>
+                <div class="stat-element"> GREAT: <span id="great-counter">0</span></div>
+                <div class="stat-element"> OK: <span id="ok-counter">0</span></div>
                 <div class="stat-element"> Miss: <span id="miss-counter">0</span></div>
             </div>
 
@@ -34,7 +37,9 @@
                 
             </div>
 
-            <div class="healthbar-container"></div>
+            <div class="healthbar-container">
+                <div class="health-bar"></div>
+            </div>
             <div class="stat-container">
                 <div class="stat-element">
                     <div class="fade-away-container">Toggle Fade</div>

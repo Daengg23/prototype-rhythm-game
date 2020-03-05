@@ -11,6 +11,9 @@ const column_3 = document.querySelector("#column-3");
 const column_4 = document.querySelector("#column-4");
 
 const miss_counter = document.querySelector("#miss-counter");
+const ok_counter = document.querySelector("#ok-counter");
+const great_counter = document.querySelector("#great-counter");
+const perfect_counter = document.querySelector("#perfect-counter");
 
 const score_board = document.querySelector(".scoreboard-container");
 const fade_away_container = document.querySelector(".fade-away-container");
@@ -21,18 +24,26 @@ let key_2_hold = false;
 let key_3_hold = false;
 let key_4_hold = false;
 
+let hit_line = 80; // the percentage of screen on where the notes will be judged for accuracy
+let accuracyModifier = 30; // the allowed room for error (ex. 55 can be accepted in a hit_line of 60, but not 45)
+//NOTE accuracy Modifier should be tweaked when used along with scroll speed
+//NOTE animation duration should be modified to fit with the hit_line percentage
+
 let start = false;
 
+// These values should be able to be reseted
 let current_time = 0;
 let chord_time = 0;
 let larger_chord_time = 0;
-let note_density = 120;
+let note_density = 110;
+let health = 100;
 let score = 0;
 let combo = 0;
 let misses = 0;
-
-let test_audio = new Audio('freedomdive.mp3'); // NOTE audio is failing to play, fix later
-//test_audio.play();
+let score_perfect = 0;
+let score_great = 0;
+let score_ok = 0;
+let test_audio = new Audio('freedomdive.mp3');
 
 window.setInterval(() => {
     if(start) {
@@ -130,32 +141,42 @@ function updateScoreBoard() {
 }
 
 function registerClick(column) {
+    let currentNote;
+    let currentColumn;
    try {
        switch(column) {
         case 1:
-            column_1.removeChild(document.querySelectorAll("#column-1 .note-type")[0]); // gets the first child inside column 1
+            currentNote = document.querySelectorAll("#column-1 .note-type")[0];
+            currentColumn = column_1;
             break;
         case 2:
-            column_2.removeChild(document.querySelectorAll("#column-2 .note-type")[0]);
+            currentNote = document.querySelectorAll("#column-2 .note-type")[0];
+            currentColumn = column_2;
             break;
         case 3:
-            column_3.removeChild(document.querySelectorAll("#column-3 .note-type")[0]); 
+            currentNote = document.querySelectorAll("#column-3 .note-type")[0];
+            currentColumn = column_3;
             break;
         case 4:
-            column_4.removeChild(document.querySelectorAll("#column-4 .note-type")[0]); 
+            currentNote = document.querySelectorAll("#column-4 .note-type")[0];
+            currentColumn = column_4;
             break;
         }
-        hit();
+        hit(currentNote, currentColumn);
    } catch {
-       miss();
+       miss(); // misses when no note was detected, to prevent spamming (can be disabled later when coded)
    }
-   
+}
+
+function removeNote(note, column) { // note and column must be elements
+    column.removeChild(note);
 }
 
 function showHitDisplay(message) {
     hit_display.innerHTML = message;
+    hit_display.innerHTML += '<div>' + combo + '</div>';
     hit_display.classList.add("pop-in"); // makes the hit screen pop in and out
-    
+
     setTimeout(() => {
         hit_display.classList.remove("pop-in");
     }, 1000);
@@ -164,15 +185,45 @@ function showHitDisplay(message) {
 function miss() {
     combo = 0;
     misses++;
+    health -= 5;
     miss_counter.innerHTML = misses;
     showHitDisplay("MISS");
 }
 
-function hit() {
+function registerScore(percentage) {
+    // percentage is judged by how far away it is from the hit line by using accuracy modifier
+    if(percentage > hit_line - accuracyModifier && percentage < hit_line - accuracyModifier * 0.6) {
+        showHitDisplay("OK!");
+        score_ok++;
+        ok_counter.innerHTML = score_ok;
+    }
+    if(percentage > hit_line - accuracyModifier * 0.7 && percentage < hit_line - accuracyModifier * 0.4) {
+        showHitDisplay("GREAT!");
+        score_great++;
+        great_counter.innerHTML = score_great
+    }
+    if(percentage > hit_line - accuracyModifier * 0.4 && percentage < hit_line + accuracyModifier * 0.4) {
+        showHitDisplay("PERFECT!");
+        score_perfect++;
+        perfect_counter.innerHTML = score_perfect;
+    }
     combo++;
     score += 50 * (1 + Math.round(combo/50));
+    console.log(percentage);
 
-    showHitDisplay(combo);
+}
+
+function hit(noteHit, columnParent) { // gets the percentage of screen of where the hit hit was and calculates the score using another function
+    let topPosition = window.getComputedStyle(noteHit).top; // getComputedStyle gets all styling of an element that was applied by classes (not in-line) // from top to bottom is 100%
+    let percentage = Math.round(topPosition.substring(0, topPosition.length - 2)/window.innerHeight * 100); // converts topPosition into a number by removing the "px" at the end and dividing it by the height of the window
+    
+    if((percentage < hit_line - accuracyModifier && percentage > accuracyModifier) || percentage > hit_line + accuracyModifier) { // NOTE hitline should be shown in the game screen
+        removeNote(noteHit, columnParent); // discards note when "Hit"
+        miss();
+    } else {
+        removeNote(noteHit, columnParent);
+        registerScore(percentage);
+    }
 
     
 }
@@ -238,7 +289,7 @@ function addNote(note) {
             noteEl.remove();
             
                 
-        }, 1000); // animation duration is the delete time
+        }, 700); // NOTE animation duration is the delete time
 
     }, note.getTiming());
 }
@@ -253,17 +304,7 @@ function addHoldNote(column, start, end) {
 }
 
 //addHoldNote(1, 100, 900);
-/*
-addNote(new Note(1, 100, "hold"));
-addNote(new Note(1, 150, "filler")); 
-addNote(new Note(1, 200, "filler"));
-addNote(new Note(1, 250, "filler"));
-addNote(new Note(1, 300, "filler"));
-addNote(new Note(1, 350, "filler"));
-addNote(new Note(1, 400, "filler"));
-addNote(new Note(1, 450, "filler"));
-addNote(new Note(1, 500, "release"));
-*/
+
 
 window.setInterval(() => {
     let note_1 = createRandomizedNote();
@@ -273,12 +314,16 @@ window.setInterval(() => {
 
    //Generating the note map
    // Be careful not to allow two notes to overlap with each other, try using get column and roll to make chords
-   if(current_time < 150) {
+   if(current_time < 0) {
        chord_time = 0; // waits until the map starts before chord progression
    } 
-   if(current_time > 150) { // NOTE WARNING, THE REST OF THE CODE IS INSIDE THIS CURRENT TIME
+   if(current_time > 0) { // NOTE WARNING, THE REST OF THE CODE IS INSIDE THIS CURRENT TIME
         // First Segment
-        /*
+        if(current_time < 325) {
+            note_1 = undefined;
+        }
+            
+        
         if(current_time > 325 && current_time <= 2500) {
             note_1 = roll(-1);
             if(chord_time > note_density) {
@@ -292,12 +337,12 @@ window.setInterval(() => {
                 chord_time = 0;
             }
         }
-        */
+        
 
         //NOTE THere might be a corelation to the RANDOM message poping and a fuicked up chord being generated
         // A fucked up chord could happen during the first time the application is loaded up (no refreshes beforehand)
 
-        /*if(current_time > 4300) { */ if(current_time > 0) {
+        if(current_time > 4300) { // if(current_time > 0) {
             if(chord_time == note_density * 1) {
                 note_1 = roll(1);
                 note_2 = roll(1);
@@ -345,16 +390,12 @@ window.setInterval(() => {
             addNote(note_3);
         }
 
-
-
     }
 
 
 }, note_density);
 
-/*
-let temp = 0;
-*/
+
 let roll_timer = 0;
 let roll_column = 0;
 
