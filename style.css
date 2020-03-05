@@ -1,18 +1,29 @@
 * {
     padding: 0;
     margin: 0;
+    color: white;
+}
+
+:root {
+    --scroll-background: var(--note-color);
+    --note-color: pink;
+    --primary-color: rgb(191, 191, 191);
+    --secondary-color: rgb(64, 64, 64);
+    --tertiary-color: transparent;
+    --quaternary-color: rgb(113, 113, 113);
 }
 
 .body-container {
     display: flex;
     flex-direction: column;
-    background-color: green;
+    background-color: black;
+    background-image: url("deletelater.jpg");
     width: 100%;
     height: 100vh;
 }
 
 .scoreboard-container {
-    background-color: yellow;
+    background-color: var(--secondary-color);
     width: 100%;
     height: 10vh;
     text-align: center;
@@ -20,14 +31,14 @@
 }
 
 .game-container {
-    background-color: rgb(4, 138, 255);
+    background: linear-gradient(0deg, black, transparent);
     height: 100%;
     display: flex;
     justify-content: center;
 }
 
 .stat-container {
-    background-color: orange;
+    background-color: var(--tertiary-color);
     margin-left: 3vw;
     margin-right: 3vw;
     width: 25%;
@@ -35,11 +46,22 @@
 }
 
 .stat-element {
-    background-color: darkorange;
+    background-color: var(--quaternary-color);
     width: 100%;
     height: 10%;
     margin-top: 2vh;
     margin-bottom: 2vh;
+}
+
+.fade-away-container {
+    font-size: 5vh;
+    text-align: center;
+    background-color: lightcoral;
+    width: 100%;
+    height: 100%;
+    vertical-align: middle;
+    
+
 }
 
 .display-container {
@@ -75,18 +97,32 @@
     height: 100%;
 }
 
-.note {
-    background-color: pink;
+.note-type {
     width: 3.6%;
     height: 3vh;
     position: absolute;
     animation-name: scroll-down;
-    animation-duration: 0.7s;
+    animation-duration: 1s;
     animation-timing-function: linear;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
     top: 0px;
 }
+
+.note {
+    background-color: var(--note-color);
+}
+
+.note-hold {
+    background-color: rgb(255, 247, 0);
+}
+.note-filler {
+    background-color: rgb(255, 250, 101);
+}
+.note-release {
+    background-color: rgb(255, 253, 187);
+}
+
 
 .key-container {
     display: inline-block;
@@ -140,16 +176,24 @@
     width: 100%;
     height: 10vh;
 }
+.selected-green {
+    background-color: lightgreen;
+}
 
 @keyframes scroll-down{
 
     /* background transparent makes a cool fade out effect to reduce visibility
-    80% {
-        background: transparent;
-    }
     */
+    0% {
+        top: 7%;
+    }
+    50% {
+        background: var(--scroll-background);
+    }
+    
     100% {
         top: 95%;
+        background: var(--scroll-background);
     }
 }
 
