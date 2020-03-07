@@ -17,6 +17,7 @@ const perfect_counter = document.querySelector("#perfect-counter");
 
 const score_board = document.querySelector(".scoreboard-container");
 const fade_away_container = document.querySelector(".fade-away-container");
+const spin_container = document.querySelector(".spin-container");
 const hit_display = document.querySelector(".hit-display");
 const healthbar_container = document.querySelector(".healthbar-container");
 
@@ -38,7 +39,8 @@ let chord_time = 0;
 let larger_chord_time = 0;
 // to find note density, -> 1000 /(bpm/60), set difficultly by halfing for doubling
 // Anima Difficulties -> 327, 163.5, 81.5
-let note_density = 81;//freedomdive-222bpm anima-184bpm
+// Freedom Dive Difficulties -> 270, 135, 67.5
+let note_density = 100;//freedomdive-222bpm anima-184bpm
 let health = 100;
 let score = 0;
 let combo = 0;
@@ -56,6 +58,7 @@ let hit_sound_3 = new Audio(hit_sound_file);
 let hit_sound_4 = new Audio(hit_sound_file);
 
 window.setInterval(() => {
+    health = 100; //NOTE THIS IS A CHEAT
     if(start) {
         current_time += 1;
         chord_time += 1;
@@ -129,6 +132,17 @@ fade_away_container.addEventListener('click', () => {
     
 });
 
+spin_container.addEventListener('click', () => {
+    if(root.style.getPropertyValue("--note-rotation") != "360deg") { // toggles between faded/non-faded
+        root.style.setProperty('--note-rotation', "360deg");
+        spin_container.classList.add("selected-green");
+    } else {
+        root.style.setProperty('--note-rotation', "0deg");
+        spin_container.classList.remove("selected-green");
+    }
+    
+});
+
 
 window.addEventListener("keyup", (e) => { // use keydown
     if(start) {
@@ -168,7 +182,7 @@ function updateHealthbar() {
 
 function gameOver() { // NOTE Work on game over later
     test_audio.pause();
-    let allNotes = document.querySelectorAll(".note-type");
+    let allNotes = document.querySelectorAll(".note-type"); // NOTE perhaps make it so that you change the value of a css variable that modifies the scroll animation (similar to the fade effect)
     for(let i = 0; i < allNotes.length; i++) {
         allNotes[i].classList.add("notes-game-over"); // adds the death animation class 
         console.log("Added death");
@@ -385,13 +399,16 @@ window.setInterval(() => {
                 note_2 = roll(1);
                 chord_time = 0;
             }
-        }
-        */
+        }*/
+        
 
-        //NOTE THere might be a corelation to the RANDOM message poping and a fuicked up chord being generated
+        // NOTE THere might be a corelation to the RANDOM message poping and a fuicked up chord being generated
         // A fucked up chord could happen during the first time the application is loaded up (no refreshes beforehand)
+        // NOTE Second note sometimes does not appear, this is because a second note is generated when the current time is exactely that of the desired amount
+        // decimal note densities do not work well when generating 2 chords, find a new and reliable way to generated notes
+        // 100 note density works best when generating all chords
 
-        /*if(current_time > 4300) { */ if(current_time > 0) {
+        /*if(current_time > 4300) { */  if(current_time > 0) {
             if(chord_time == note_density * 1) {
                 note_1 = roll(1);
                 note_2 = roll(1);

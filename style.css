@@ -8,6 +8,7 @@
     --scroll-background: var(--note-color);
     --health-percentage: 100%;
     --note-color: pink;
+    --note-rotation: 0deg;
     --primary-color: rgb(191, 191, 191);
     --secondary-color: rgb(64, 64, 64);
     --tertiary-color: transparent;
@@ -54,15 +55,13 @@
     margin-bottom: 2vh;
 }
 
-.fade-away-container {
+.mod-container {
     font-size: 5vh;
     text-align: center;
     background-color: lightcoral;
     width: 100%;
     height: 100%;
     vertical-align: middle;
-    
-
 }
 
 .display-container {
@@ -118,6 +117,11 @@
 
 .note {
     background-color: var(--note-color);
+}
+
+.note-circle {
+    height: 6vh;
+    border-radius: 50%;
 }
 
 .note-hold {
@@ -200,7 +204,8 @@
     
     100% {
         top: 95%;
-        background: var(--scroll-background)
+        background: var(--scroll-background);
+        transform: rotate(var(--note-rotation));
     }
 }
 
