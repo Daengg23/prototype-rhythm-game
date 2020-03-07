@@ -18,6 +18,7 @@ const perfect_counter = document.querySelector("#perfect-counter");
 const score_board = document.querySelector(".scoreboard-container");
 const fade_away_container = document.querySelector(".fade-away-container");
 const hit_display = document.querySelector(".hit-display");
+const healthbar_container = document.querySelector(".healthbar-container");
 
 let key_1_hold = false;
 let key_2_hold = false;
@@ -37,7 +38,7 @@ let chord_time = 0;
 let larger_chord_time = 0;
 // to find note density, -> 1000 /(bpm/60), set difficultly by halfing for doubling
 // Anima Difficulties -> 327, 163.5, 81.5
-let note_density = 163.5;//freedomdive-222bpm anima-184bpm
+let note_density = 81;//freedomdive-222bpm anima-184bpm
 let health = 100;
 let score = 0;
 let combo = 0;
@@ -45,7 +46,14 @@ let misses = 0;
 let score_perfect = 0;
 let score_great = 0;
 let score_ok = 0;
+
 let test_audio = new Audio('anima.mp3');
+let hit_sound_file = 'hitSound1.mp3';
+//NOTE hitsound have a delay when they are pushed. Unless they are pressed after they have ended played, they will have a delay
+let hit_sound_1 = new Audio(hit_sound_file); // hit sound just for the first column
+let hit_sound_2 = new Audio(hit_sound_file);
+let hit_sound_3 = new Audio(hit_sound_file);
+let hit_sound_4 = new Audio(hit_sound_file);
 
 window.setInterval(() => {
     if(start) {
@@ -64,6 +72,7 @@ window.addEventListener("keydown", (e) => { // use keydown
                 key_1.classList.add("highlight-key");
                 column_1.classList.add("highlight-column");
                 key_1_hold = true;
+                hit_sound_1.play();
                 registerClick(1);
             }
             
@@ -73,6 +82,7 @@ window.addEventListener("keydown", (e) => { // use keydown
                 key_2.classList.add("highlight-key");
                 column_2.classList.add("highlight-column");
                 key_2_hold = true;
+                hit_sound_2.play();
                 registerClick(2);
             }
             
@@ -82,6 +92,7 @@ window.addEventListener("keydown", (e) => { // use keydown
                 key_3.classList.add("highlight-key");
                 column_3.classList.add("highlight-column");
                 key_3_hold = true;
+                hit_sound_3.play();
                 registerClick(3);
             }
         }
@@ -90,9 +101,15 @@ window.addEventListener("keydown", (e) => { // use keydown
                 key_4.classList.add("highlight-key");
                 column_4.classList.add("highlight-column");
                 key_4_hold = true;
+                hit_sound_4.play();
                 registerClick(4);
             }
         }
+        if(e.keyCode === 76) { // NOTE testing key used for testing lose conditions, delete later
+            health = 0;
+            gameOver();
+        }
+        
     }
     if(e.keyCode === 32) {
         start = true; // starts the game with a space press
@@ -135,8 +152,30 @@ window.addEventListener("keyup", (e) => { // use keydown
             column_4.classList.remove("highlight-column");
             key_4_hold = false;
         }
+
     }
 });
+
+function updateHealthbar() {
+    if(health > 100) {
+        health = 100; // prevents additional health (NOTE maybe have an option for overhealed as gameplay)
+    }
+    root.style.setProperty("--health-percentage", health + "%"); // changes the style variable for health percentage
+    if(health <= 0) {
+        gameOver();
+    }
+}
+
+function gameOver() { // NOTE Work on game over later
+    test_audio.pause();
+    let allNotes = document.querySelectorAll(".note-type");
+    for(let i = 0; i < allNotes.length; i++) {
+        allNotes[i].classList.add("notes-game-over"); // adds the death animation class 
+        console.log("Added death");
+    }
+    //start = false;
+    //console.log('LOSE');
+}
 
 function updateScoreBoard() {
     score_board.innerHTML = score;
@@ -166,7 +205,7 @@ function registerClick(column) {
         }
         hit(currentNote, currentColumn);
    } catch {
-       miss(); // misses when no note was detected, to prevent spamming (can be disabled later when coded)
+       //miss(); // misses when no note was detected, to prevent spamming (can be disabled later when coded)
    }
 }
 
@@ -187,31 +226,39 @@ function showHitDisplay(message) {
 function miss() {
     combo = 0;
     misses++;
-    health -= 5;
+    health -= 3;
+    updateHealthbar();
     miss_counter.innerHTML = misses;
     showHitDisplay("MISS");
 }
 
 function registerScore(percentage) {
+    let initialScore = 0;
     // percentage is judged by how far away it is from the hit line by using accuracy modifier
-    if(percentage > hit_line - accuracyModifier && percentage < hit_line - accuracyModifier * 0.6) {
+    if(percentage > hit_line - accuracyModifier && percentage < hit_line - accuracyModifier * 0.7) {
         showHitDisplay("OK!");
         score_ok++;
         ok_counter.innerHTML = score_ok;
+        initialScore = 50;
     }
     if(percentage > hit_line - accuracyModifier * 0.7 && percentage < hit_line - accuracyModifier * 0.4) {
         showHitDisplay("GREAT!");
         score_great++;
-        great_counter.innerHTML = score_great
+        great_counter.innerHTML = score_great;
+        initialScore = 100;
     }
     if(percentage > hit_line - accuracyModifier * 0.4 && percentage < hit_line + accuracyModifier * 0.4) {
         showHitDisplay("PERFECT!");
         score_perfect++;
         perfect_counter.innerHTML = score_perfect;
+        initialScore = 300;
     }
     combo++;
-    score += 50 * (1 + Math.round(combo/50));
-    console.log(percentage);
+    score += initialScore * (1 + Math.round(combo/50));
+    if(combo >= 50) { // give hp boost on combo
+        health += 3;
+        updateHealthbar();
+    }
 
 }
 

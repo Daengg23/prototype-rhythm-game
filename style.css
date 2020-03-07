@@ -6,6 +6,7 @@
 
 :root {
     --scroll-background: var(--note-color);
+    --health-percentage: 100%;
     --note-color: pink;
     --primary-color: rgb(191, 191, 191);
     --secondary-color: rgb(64, 64, 64);
@@ -100,7 +101,7 @@
 .health-bar {
     background-color: green;
     width: 100%;
-    height: 100%;
+    height: var(--health-percentage);
 }
 
 .note-type {
@@ -199,7 +200,25 @@
     
     100% {
         top: 95%;
-        background: var(--scroll-background);
+        background: var(--scroll-background)
+    }
+}
+
+.notes-game-over {
+    animation-name: note-death;
+    animation-duration: 0.7s;
+}
+
+@keyframes note-death {
+    0% {
+        top: 20%;
+    }
+    50% {
+        transform: rotate(180deg);
+    }
+
+    100% {
+        top: 90%;
     }
 }
 
