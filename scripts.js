@@ -40,7 +40,7 @@ let larger_chord_time = 0;
 // to find note density, -> 1000 /(bpm/60), set difficultly by halfing for doubling
 // Anima Difficulties -> 327, 163.5, 81.5
 // Freedom Dive Difficulties -> 270, 135, 67.5
-let note_density = 100;//freedomdive-222bpm anima-184bpm
+let note_density = 184;//freedomdive-222bpm anima-184bpm
 let health = 100;
 let score = 0;
 let combo = 0;
