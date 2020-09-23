@@ -108,7 +108,7 @@
     height: 3vh;
     position: absolute;
     animation-name: scroll-down;
-    animation-duration: 0.7s;
+    animation-duration: 0.4s;
     animation-timing-function: linear;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
