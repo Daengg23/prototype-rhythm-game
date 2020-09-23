@@ -40,7 +40,7 @@ let larger_chord_time = 0;
 // to find note density, -> 1000 /(bpm/60), set difficultly by halfing for doubling
 // Anima Difficulties -> 327, 163.5, 81.5
 // Freedom Dive Difficulties -> 270, 135, 67.5
-let note_density = 184;//freedomdive-222bpm anima-184bpm
+let note_density = 92;//freedomdive-222bpm anima-184bpm
 let health = 100;
 let score = 0;
 let combo = 0;
@@ -49,7 +49,7 @@ let score_perfect = 0;
 let score_great = 0;
 let score_ok = 0;
 
-let test_audio = new Audio('anima.mp3');
+let test_audio = new Audio('anima1.mp3');
 let hit_sound_file = 'hitSound1.mp3';
 //NOTE hitsound have a delay when they are pushed. Unless they are pressed after they have ended played, they will have a delay
 let hit_sound_1 = new Audio(hit_sound_file); // hit sound just for the first column
